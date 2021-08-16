@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Profile;
 use App\User;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
@@ -56,21 +56,21 @@ class ProfileController extends Controller
         ]);
 
         if (request('image')) {
-//            $imagePath = request('image')->store('profile', 'public');
-//
-//            $image = Image::make(public_path("/storage/{$imagePath}"))->fit(1080, 1080, function ($constraint) {
-//                $constraint->upsize();
-//            });
+            $imagePath = request('image')->store('profile', 'public');
 
-            $imagePath = Cloudinary::upload($request->file('image')->getRealPath(), [
-                'folder' => 'laragram/avatar',
-                'transformation' => [
-                    'background' => 'white',
-                    'width' => 400,
-                    'height' => 400,
-                    'crop' => 'pad'
-                ]
-            ])->getSecurePath();
+            $image = Image::make(public_path("/storage/{$imagePath}"))->fit(1080, 1080, function ($constraint) {
+                $constraint->upsize();
+            });
+
+//            $imagePath = Cloudinary::upload($request->file('image')->getRealPath(), [
+//                'folder' => 'laragram/avatar',
+//                'transformation' => [
+//                    'background' => 'white',
+//                    'width' => 400,
+//                    'height' => 400,
+//                    'crop' => 'pad'
+//                ]
+//            ])->getSecurePath();
 
 //            $oldProfileImage = public_path($user->profile->image);
 

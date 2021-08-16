@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Like;
 use App\Post;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -42,25 +42,25 @@ class PostController extends Controller
             'caption' => 'required|max:255',
             'image' => 'required|image',
         ]);
-//        $imagePath = request('image')->store('uploads', 'public');
-//
-//        $image = Image::make(public_path("storage/{$imagePath}"))->fit(1080, 1080, function ($constraint) {
-//            $constraint->upsize();
-//        });
-//        $image->save();
+        $imagePath = request('image')->store('uploads', 'public');
 
-        /**
-         * Cloudinary
-         */
-        $imagePath = Cloudinary::upload($request->file('image')->getRealPath(), [
-            'folder' => 'laragram/images',
-            'transformation' => [
-                'background' => 'white',
-                'height' => 1080,
-                'width' => 1080,
-                'crop' => 'pad'
-            ]
-        ])->getSecurePath();
+        $image = Image::make(public_path("storage/{$imagePath}"))->fit(1080, 1080, function ($constraint) {
+            $constraint->upsize();
+        });
+        $image->save();
+
+//        /**
+//         * Cloudinary
+//         */
+//        $imagePath = Cloudinary::upload($request->file('image')->getRealPath(), [
+//            'folder' => 'laragram/images',
+//            'transformation' => [
+//                'background' => 'white',
+//                'height' => 1080,
+//                'width' => 1080,
+//                'crop' => 'pad'
+//            ]
+//        ])->getSecurePath();
 
 //        $width = 1080;
 //        $height = 1080;
