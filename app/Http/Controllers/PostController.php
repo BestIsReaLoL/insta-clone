@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
@@ -38,16 +39,20 @@ class PostController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-        $data = request()->validate([
+        $data = $request->validate([
             'caption' => 'required|max:255',
             'image' => 'required|image',
         ]);
-        $imagePath = request('image')->store('uploads', 'public');
+        $imageTempPath = $request->image->store('uploads');
 
-        $image = Image::make(public_path("storage/{$imagePath}"))->fit(1080, 1080, function ($constraint) {
-            $constraint->upsize();
-        });
-        $image->save();
+        $imagePath = Storage::url($imageTempPath);
+
+
+
+//        $image = Image::make($imagePath)->fit(1080, 1080, function ($constraint) {
+//            $constraint->upsize();
+//        });
+//        $image->save();
 
 //        /**
 //         * Cloudinary
