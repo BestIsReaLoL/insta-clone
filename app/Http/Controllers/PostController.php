@@ -47,8 +47,6 @@ class PostController extends Controller
 
         $imagePath = Storage::url($imageTempPath);
 
-
-
 //        $image = Image::make($imagePath)->fit(1080, 1080, function ($constraint) {
 //            $constraint->upsize();
 //        });

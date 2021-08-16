@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Profile;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
@@ -49,18 +50,19 @@ class ProfileController extends Controller
     {
         $this->authorize('update', $user->profile);
 
-        $data = request()->validate([
+        $data = $request->validate([
             'description' => 'required',
             'url' => 'url',
             'image' => '',
         ]);
 
-        if (request('image')) {
-            $imagePath = request('image')->store('profile', 'public');
+        if ($request->image) {
+            $imageTempPath = $request->image->store('profile');
+            $imagePath = Storage::url($imageTempPath);
 
-            $image = Image::make(public_path("/storage/{$imagePath}"))->fit(1080, 1080, function ($constraint) {
-                $constraint->upsize();
-            });
+//            $image = Image::make(public_path("/storage/{$imagePath}"))->fit(1080, 1080, function ($constraint) {
+//                $constraint->upsize();
+//            });
 
 //            $imagePath = Cloudinary::upload($request->file('image')->getRealPath(), [
 //                'folder' => 'laragram/avatar',
